@@ -20,7 +20,7 @@ from typing import Optional, Tuple
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from ppt_extractor import PPTExtractor
-from error_handler import PPTExtractorError, ErrorCode, safe_execute
+from error_handler import PPTExtractorError, ErrorCode, ErrorHandler, safe_execute
 
 
 def create_argument_parser() -> argparse.ArgumentParser:
@@ -215,7 +215,8 @@ def main():
             print(f"日志文件: {log_file}")
         print("-" * 60)
         
-        # 创建提取器并执行提取
+        # 创建错误处理器和提取器
+        error_handler = ErrorHandler(log_file=log_file, enable_console=enable_console_log)
         extractor = PPTExtractor(log_file=log_file, enable_console_log=enable_console_log)
         
         def extract_operation():
@@ -224,8 +225,7 @@ def main():
         # 安全执行提取操作
         result = safe_execute(
             extract_operation,
-            error_message="提取嵌入对象时发生错误",
-            context={'input_file': input_file, 'output_dir': output_dir}
+            error_handler=error_handler
         )
         
         # 显示结果报告
