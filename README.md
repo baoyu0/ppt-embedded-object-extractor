@@ -2,8 +2,29 @@
 
 一个强大的Python工具，用于从PowerPoint文件中提取所有嵌入的Word、Excel和其他文件对象，并将它们完整保存到指定文件夹中。
 
+## 🎯 重要更新：原始中文文件名恢复解决方案
+
+**问题解决**：通过深度技术分析，我们确认PPT文件结构中不保存嵌入对象的原始文件名，这是PowerPoint的设计特性。本工具提供了完整的解决方案来恢复有意义的中文文件名。
+
+### 三种解决方案
+
+1. **文件名映射方案（推荐）**
+   - 创建JSON映射模板，用户手动填写原始文件名
+   - 完全保留原始文件名，100%准确
+   - 适用于重要文档和需要精确文件名的场合
+
+2. **智能命名方案**
+   - 自动生成中文描述性名称（如：Word文档_01.docx）
+   - 无需用户干预，自动化程度高
+   - 适用于快速处理和不要求原始文件名的场合
+
+3. **预防性措施**
+   - 建立文档管理规范，从源头解决问题
+   - 适用于新建PPT文件的最佳实践
+
 ## 🌟 功能特性
 
+### 核心功能
 - ✅ **多格式支持**: 支持PPTX和PPT格式文件
 - 📁 **智能识别**: 自动识别和分类不同类型的嵌入文件（Word、Excel、PDF等）
 - 🔍 **文件类型检测**: 基于文件头签名的精确文件类型识别
@@ -11,7 +32,15 @@
 - 🛡️ **错误处理**: 完善的异常处理和错误报告机制
 - 📝 **日志记录**: 可选的详细日志记录功能
 - 🖥️ **多种模式**: 支持命令行和交互式两种使用模式
-- 🔄 **文件完整性**: 保持原始文件名和内容完整性
+
+### 增强功能（新增）
+- 🎯 **中文文件名恢复**: 解决原始中文文件名丢失问题
+- 📋 **文件名映射系统**: JSON模板让用户轻松指定原始文件名
+- 🤖 **智能命名策略**: 自动生成有意义的中文描述性文件名
+- 🔬 **深度文件分析**: 解析PPT的XML结构、关系文件、嵌入对象目录
+- 🌐 **多重编码支持**: 支持UTF-8、GBK、GB2312等多种中文编码
+- 📦 **OLE复合文档解析**: 处理二进制嵌入对象
+- 🔄 **完整解决方案**: 从问题分析到实际应用的端到端解决方案
 
 ## 📋 系统要求
 
@@ -53,7 +82,7 @@ pip install -r requirements.txt
 
 ### 2. 基本使用
 
-#### 命令行模式
+#### 标准提取模式
 ```bash
 # 基本用法
 python main.py presentation.pptx output_folder
@@ -63,9 +92,30 @@ python main.py -i presentation.pptx -o output_folder
 
 # 启用日志记录
 python main.py presentation.pptx output_folder --log extract.log
+```
 
-# 禁用控制台输出
-python main.py presentation.pptx output_folder --no-console-log
+#### 增强提取模式（推荐）
+```bash
+# 智能命名提取
+python enhanced_ppt_extractor.py
+# 选择选项3：智能命名提取
+
+# 创建文件名映射模板
+python enhanced_ppt_extractor.py
+# 选择选项1：创建文件名映射模板
+
+# 使用映射文件提取
+python enhanced_ppt_extractor.py
+# 选择选项2：使用现有映射文件提取
+```
+
+#### 完整解决方案演示
+```bash
+# 运行完整解决方案演示
+python final_ppt_solution.py
+
+# 或使用便捷脚本
+run_solution.bat
 ```
 
 #### 交互模式
@@ -159,7 +209,30 @@ PPT嵌入对象提取报告
 
 ## 🔧 高级功能
 
-### 编程接口
+### 增强版提取器编程接口
+
+```python
+from enhanced_ppt_extractor import EnhancedPPTExtractor
+
+# 创建增强版提取器实例
+extractor = EnhancedPPTExtractor('output_directory')
+
+# 方法1：创建文件名映射模板
+mapping_file = extractor.create_filename_mapping_template('presentation.pptx')
+print(f"映射模板已创建: {mapping_file}")
+
+# 方法2：使用映射文件提取
+success = extractor.extract_with_mapping('presentation.pptx', 'mapping.json')
+if success:
+    print("映射提取成功！")
+
+# 方法3：智能命名提取
+success = extractor.extract_with_smart_naming('presentation.pptx')
+if success:
+    print("智能命名提取成功！")
+```
+
+### 标准提取器编程接口
 
 ```python
 from ppt_extractor import PPTExtractor
@@ -244,14 +317,23 @@ python main.py presentation.pptx output_folder --log debug.log
 
 ```
 ppt-extractor/
-├── main.py                 # 主程序入口
-├── ppt_extractor.py        # 核心提取功能
-├── file_type_detector.py   # 文件类型检测
-├── error_handler.py        # 错误处理机制
-├── requirements.txt        # Python依赖
-├── setup_env.bat          # Windows环境设置
-├── setup_env.sh           # Linux/macOS环境设置
-└── README.md              # 使用说明
+├── main.py                          # 主程序入口
+├── ppt_extractor.py                 # 核心提取功能
+├── enhanced_ppt_extractor.py        # 增强版提取器（支持文件名映射）
+├── final_ppt_solution.py            # 完整解决方案演示
+├── file_type_detector.py            # 文件类型检测
+├── error_handler.py                 # 错误处理机制
+├── analyze_embeddings.py            # 嵌入对象分析工具
+├── deep_analysis.py                 # 深度PPT结构分析
+├── find_chinese_names.py            # 中文文件名查找工具
+├── requirements.txt                 # Python依赖
+├── setup_env.bat                   # Windows环境设置
+├── setup_env.sh                    # Linux/macOS环境设置
+├── run_solution.bat                # 解决方案快捷启动脚本
+├── extracted_objects/               # 标准提取结果
+├── final_smart_naming/              # 智能命名结果
+├── final_mapped_naming/             # 映射重命名结果
+└── README.md                       # 使用说明
 ```
 
 ## 🤝 贡献指南
@@ -282,7 +364,39 @@ ppt-extractor/
 2. 检查 [Issues](../../issues) 页面是否有类似问题
 3. 创建新的 Issue 描述您的问题
 
+## 🔬 技术深度分析
+
+### PPT文件结构分析结果
+
+通过深度技术分析，我们发现：
+
+1. **文件结构事实**
+   - PPT文件采用Open XML格式，本质上是ZIP压缩包
+   - 嵌入对象存储在`ppt/embeddings/`目录中
+   - 关系文件(`_rels/*.xml`)定义对象间的关联关系
+   - 幻灯片XML文件包含对象的引用信息
+
+2. **文件名存储机制**
+   - PowerPoint不在文件结构中保存嵌入对象的原始文件名
+   - 即使通过"插入对象"→"由文件创建"方式插入也是如此
+   - 只保存文件类型信息，如"Microsoft Word Document"
+   - 这是PowerPoint的设计特性，不是技术缺陷
+
+3. **解决方案原理**
+   - 文件名映射：通过外部JSON文件建立文件名对应关系
+   - 智能命名：基于文件类型和序号生成有意义的中文名称
+   - 深度解析：分析XML结构、OLE对象、多种编码格式
+
+### 创新技术特性
+
+- **多重编码解析**：支持UTF-8、GBK、GB2312等中文编码
+- **OLE复合文档处理**：解析二进制嵌入对象结构
+- **XML深度分析**：遍历所有XML文件查找文件名线索
+- **智能文件类型识别**：基于文件头和扩展名的双重验证
+- **用户友好映射系统**：JSON模板让用户轻松管理文件名
+
 ---
 
-**版本**: 1.0.0  
-**最后更新**: 2024年1月
+**版本**: 2.0.0  
+**最后更新**: 2025年1月  
+**重大更新**: 增加原始中文文件名恢复解决方案

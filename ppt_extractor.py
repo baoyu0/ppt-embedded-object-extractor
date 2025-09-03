@@ -122,6 +122,9 @@ class PPTExtractor:
                 # 分析关系文件以获取更多信息
                 relationships = self._parse_relationships(zip_file)
                 
+                # 解析幻灯片XML以获取OLE对象的原始文件名
+                ole_names = self._parse_slide_xml_for_ole_names(zip_file)
+                
                 # 提取嵌入文件
                 if embedded_files:
                     print(f"发现 {len(embedded_files)} 个嵌入对象")
@@ -135,10 +138,32 @@ class PPTExtractor:
                             file_ext, file_type, mime_type = self.file_detector.detect_file_type(file_data, file_path)
                             file_category = self.file_detector.get_file_category(file_ext[1:])  # 去掉点号
                             
-                            # 生成输出文件名
+                            # 获取文件名，优先使用embeddings目录中的具体文件名
                             base_name = os.path.basename(file_path)
-                            if '.' not in base_name:
-                                base_name += file_ext
+                            original_name = None  # 初始化变量
+                            
+                            # 如果是oleObject*.bin这样的通用文件名，尝试获取更具体的名称
+                            if base_name.startswith('oleObject') and base_name.endswith('.bin'):
+                                # 尝试从关系文件中查找对应的原始文件名
+                                for rel_id, rel_info in relationships.items():
+                                    if rel_info['target'] in file_path or file_path.endswith(rel_info['target']):
+                                        if rel_id in ole_names:
+                                            original_name = ole_names[rel_id]
+                                            break
+                                
+                                if original_name and original_name.strip():
+                                    base_name = original_name.strip()
+                                    # 确保文件名有正确的扩展名
+                                    if not any(base_name.lower().endswith(ext) for ext in ['.xlsx', '.docx', '.pdf', '.pptx', '.txt', '.xls']):
+                                        base_name += file_ext
+                                else:
+                                    # 保持原始的oleObject文件名，只添加正确的扩展名
+                                    base_name = base_name.replace('.bin', file_ext)
+                            else:
+                                # 对于已经有具体名称的文件，保持原名并记录
+                                original_name = base_name
+                                if '.' not in base_name:
+                                    base_name += file_ext
                             
                             output_path = os.path.join(output_dir, base_name)
                             
@@ -162,6 +187,7 @@ class PPTExtractor:
                                 file_info = {
                                     'original_path': file_path,
                                     'output_path': output_path,
+                                    'original_name': original_name if original_name else '未知',
                                     'file_type': file_type,
                                     'file_category': file_category,
                                     'mime_type': mime_type,
@@ -270,6 +296,88 @@ class PPTExtractor:
         
         return relationships
     
+    def _parse_slide_xml_for_ole_names(self, zip_file: zipfile.ZipFile) -> Dict[str, str]:
+        """
+        解析幻灯片XML文件以获取OLE对象的原始文件名
+        
+        Returns:
+            字典，键为嵌入对象的关系ID或目标路径，值为原始文件名
+        """
+        ole_names = {}
+        
+        try:
+            # 查找所有幻灯片XML文件
+            slide_files = [f for f in zip_file.namelist() if f.startswith('ppt/slides/slide') and f.endswith('.xml')]
+            
+            for slide_file in slide_files:
+                try:
+                    slide_data = zip_file.read(slide_file)
+                    root = ET.fromstring(slide_data)
+                    
+                    # 定义命名空间
+                    namespaces = {
+                        'p': 'http://schemas.openxmlformats.org/presentationml/2006/main',
+                        'a': 'http://schemas.openxmlformats.org/drawingml/2006/main',
+                        'r': 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+                    }
+                    
+                    # 查找所有OLE对象
+                    # 方法1: 查找oleObj元素
+                    ole_objects = root.findall('.//p:oleObj', namespaces)
+                    for ole_obj in ole_objects:
+                        # 获取关系ID
+                        rel_id = ole_obj.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+                        if rel_id:
+                            # 查找对应的图形框架以获取名称（向上遍历父元素）
+                            current = ole_obj
+                            while current is not None:
+                                if current.tag.endswith('}graphicFrame'):
+                                    cnv_pr = current.find('.//p:cNvPr', namespaces)
+                                    if cnv_pr is not None:
+                                        name = cnv_pr.get('name')
+                                        if name and name != 'Object 1':  # 过滤默认名称
+                                            ole_names[rel_id] = name
+                                    break
+                                current = current.getparent() if hasattr(current, 'getparent') else None
+                    
+                    # 方法2: 查找所有图形框架中的cNvPr元素
+                    graphic_frames = root.findall('.//p:graphicFrame', namespaces)
+                    for frame in graphic_frames:
+                        cnv_pr = frame.find('.//p:cNvPr', namespaces)
+                        if cnv_pr is not None:
+                            name = cnv_pr.get('name')
+                            if name and not name.startswith('Object '):
+                                # 查找相关的嵌入对象
+                                ole_obj = frame.find('.//p:oleObj', namespaces)
+                                if ole_obj is not None:
+                                    rel_id = ole_obj.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+                                    if rel_id:
+                                        ole_names[rel_id] = name
+                    
+                    # 方法3: 查找所有包含文件名信息的元素
+                    all_cnv_pr = root.findall('.//p:cNvPr', namespaces)
+                    for cnv_pr in all_cnv_pr:
+                        name = cnv_pr.get('name')
+                        if name and ('.' in name or any(ext in name.lower() for ext in ['.xlsx', '.docx', '.pdf', '.pptx'])):
+                            # 这可能是一个文件名，尝试找到相关的嵌入对象
+                            parent = cnv_pr.getparent()
+                            while parent is not None:
+                                ole_obj = parent.find('.//p:oleObj', namespaces)
+                                if ole_obj is not None:
+                                    rel_id = ole_obj.get('{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id')
+                                    if rel_id:
+                                        ole_names[rel_id] = name
+                                        break
+                                parent = parent.getparent()
+                                
+                except Exception as e:
+                    self.error_handler.logger.warning(f"解析幻灯片文件 {slide_file} 时出错: {str(e)}")
+                    
+        except Exception as e:
+            self.error_handler.logger.warning(f"解析幻灯片XML文件时出错: {str(e)}")
+        
+        return ole_names
+    
 
     
 
@@ -317,6 +425,12 @@ class PPTExtractor:
                 print(f"\n📁 {category} ({len(files)} 个文件):")
                 for file_info in files:
                     print(f"  ✓ {os.path.basename(file_info['output_path'])}")
+                    
+                    # 显示原始文件名（如果有的话）
+                    original_name = file_info.get('original_name')
+                    if original_name and original_name != '未知':
+                        print(f"    原始名称: {original_name}")
+                    
                     print(f"    类型: {file_info['file_type']}")
                     print(f"    大小: {file_info['formatted_size']}")
                     print(f"    保存路径: {file_info['output_path']}")

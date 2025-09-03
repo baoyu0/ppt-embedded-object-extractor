@@ -1,0 +1,132 @@
+{
+  "说明": "请在下面的映射中填写每个文件的原始中文名称",
+  "ppt_file": "课程共建交付件清单和开发顺序0828 - 20250903145602.pptx",
+  "mappings": [
+    {
+      "序号": 1,
+      "当前文件名": "Microsoft_Excel_Worksheet.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "课程设计文档.docx",
+      "描述": "这是第1个嵌入的Excel表格"
+    },
+    {
+      "序号": 2,
+      "当前文件名": "Microsoft_Excel_Worksheet1.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "实验手册.docx",
+      "描述": "这是第2个嵌入的Excel表格"
+    },
+    {
+      "序号": 3,
+      "当前文件名": "Microsoft_Excel_Worksheet1_1.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "评分标准.xlsx",
+      "描述": "这是第3个嵌入的Excel表格"
+    },
+    {
+      "序号": 4,
+      "当前文件名": "Microsoft_Excel_Worksheet2.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "课程大纲.pptx",
+      "描述": "这是第4个嵌入的Excel表格"
+    },
+    {
+      "序号": 5,
+      "当前文件名": "Microsoft_Excel_Worksheet2_1.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "作业模板.docx",
+      "描述": "这是第5个嵌入的Excel表格"
+    },
+    {
+      "序号": 6,
+      "当前文件名": "Microsoft_Excel_Worksheet6.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "考试题库.xlsx",
+      "描述": "这是第6个嵌入的Excel表格"
+    },
+    {
+      "序号": 7,
+      "当前文件名": "Microsoft_Excel_Worksheet6_1.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "教学计划.docx",
+      "描述": "这是第7个嵌入的Excel表格"
+    },
+    {
+      "序号": 8,
+      "当前文件名": "Microsoft_Excel_Worksheet_1.xlsx",
+      "文件类型": "Excel表格",
+      "原始文件名": "学习资料.xlsx",
+      "描述": "这是第8个嵌入的Excel表格"
+    },
+    {
+      "序号": 9,
+      "当前文件名": "Microsoft_PowerPoint_Presentation.pptx",
+      "文件类型": "PowerPoint演示文稿",
+      "原始文件名": "课程介绍.pptx",
+      "描述": "这是第9个嵌入的PowerPoint演示文稿"
+    },
+    {
+      "序号": 10,
+      "当前文件名": "Microsoft_PowerPoint_Presentation_1.pptx",
+      "文件类型": "PowerPoint演示文稿",
+      "原始文件名": "参考资料.docx",
+      "描述": "这是第10个嵌入的PowerPoint演示文稿"
+    },
+    {
+      "序号": 11,
+      "当前文件名": "Microsoft_Word_Document.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "实验指导书.docx",
+      "描述": "这是第11个嵌入的Word文档"
+    },
+    {
+      "序号": 12,
+      "当前文件名": "Microsoft_Word_Document3.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "课程评估表.xlsx",
+      "描述": "这是第12个嵌入的Word文档"
+    },
+    {
+      "序号": 13,
+      "当前文件名": "Microsoft_Word_Document3_1.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名13.docx",
+      "描述": "请填写文件描述"
+    },
+    {
+      "序号": 14,
+      "当前文件名": "Microsoft_Word_Document4.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名14.docx",
+      "描述": "请填写文件描述"
+    },
+    {
+      "序号": 15,
+      "当前文件名": "Microsoft_Word_Document4_1.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名15.docx",
+      "描述": "请填写文件描述"
+    },
+    {
+      "序号": 16,
+      "当前文件名": "Microsoft_Word_Document5.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名16.docx",
+      "描述": "请填写文件描述"
+    },
+    {
+      "序号": 17,
+      "当前文件名": "Microsoft_Word_Document5_1.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名17.docx",
+      "描述": "请填写文件描述"
+    },
+    {
+      "序号": 18,
+      "当前文件名": "Microsoft_Word_Document_1.docx",
+      "文件类型": "Word文档",
+      "原始文件名": "请填写原始文件名18.docx",
+      "描述": "请填写文件描述"
+    }
+  ]
+}

@@ -40,6 +40,7 @@ class ErrorCode(Enum):
     NO_EMBEDDED_OBJECTS = "E202"
     OBJECT_CORRUPTED = "E203"
     SAVE_FAILED = "E204"
+    FILE_SAVE_FAILED = "E205"
     
     # 系统相关错误
     MEMORY_ERROR = "E301"
