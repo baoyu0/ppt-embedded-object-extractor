@@ -227,3 +227,22 @@ Thumbs.db
 !example*.pptx
 !sample*.pptx
 !test*.pptx
+
+# Extracted objects and file-specific information
+extracted_objects/
+final_smart_naming/
+final_mapped_naming/
+filename_mapping_template.json
+filename_mapping_example.json
+run_solution.bat
+final_ppt_solution.py
+
+# Any directories containing extracted content
+*_extracted/
+*_objects/
+*_files/
+
+# Mapping and configuration files with specific content
+*mapping*.json
+*config*.json
+*template*.json
